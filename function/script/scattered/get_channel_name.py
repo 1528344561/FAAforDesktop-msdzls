@@ -1,4 +1,6 @@
 def get_channel_name(game_name, name_1p, name_2p):
+    if game_name =="":
+        return name_1p,name_2p
     """转化出频道名"""
     if name_1p == "":
         channel_1p = game_name

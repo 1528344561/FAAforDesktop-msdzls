@@ -29,7 +29,7 @@ class FAA:
         self.handle = faa_get_handle(channel=self.channel, mode="flash")
         self.handle_browser = faa_get_handle(channel=self.channel, mode="browser")
         self.handle_360 = faa_get_handle(channel=self.channel, mode="360")
-
+        self.handle_zmb = faa_get_handle(channel=self.channel, mode="zmb")
         # 缩放
         self.zoom = zoom  # float 1.0 即百分百
 
@@ -470,7 +470,7 @@ class FAA:
                 loop_find_p_in_w(
                     raw_w_handle=self.handle,
                     raw_range=[0, 0, 950, 600],
-                    target_path=paths["picture"]["common"] + "\\战斗\\战斗前_创建房间.png",
+                    target_path=paths["picture"]["common"] + "\\battle\\战斗前_创建房间.png",
                     click_zoom=self.zoom,
                     target_sleep=1,
                     click=True)
@@ -569,7 +569,7 @@ class FAA:
                 loop_find_p_in_w(
                     raw_w_handle=self.handle,
                     raw_range=[0, 0, 950, 600],
-                    target_path=paths["picture"]["common"] + "\\战斗\\战斗前_魔塔_创建房间.png",
+                    target_path=paths["picture"]["common"] + "\\battle\\战斗前_魔塔_创建房间.png",
                     click_zoom=self.zoom,
                     target_sleep=1,
                     click=True)
@@ -754,7 +754,7 @@ class FAA:
                 click_set_password()
 
                 # 创建队伍
-                my_path = "{}\\战斗\\战斗前_创建房间.png".format(paths["picture"]["common"])
+                my_path = "{}\\battle\\战斗前_创建房间.png".format(paths["picture"]["common"])
                 loop_find_p_in_w(
                     raw_w_handle=self.handle,
                     raw_range=[0, 0, 950, 600],
@@ -1272,7 +1272,7 @@ class FAA:
                 find = find_p_in_w(
                     raw_w_handle=handle,
                     raw_range=[0, 0, 950, 600],
-                    target_path=paths["picture"]["card"] + "\\战斗\\" + mat_card + ".png",
+                    target_path=paths["picture"]["card"] + "\\battle\\" + mat_card + ".png",
                     target_tolerance=0.99)
                 if find:
                     position_list.append([int(find[0] * zoom), int(find[1] * zoom)])
@@ -1378,7 +1378,7 @@ class FAA:
                     if find_p_in_w(
                             raw_w_handle=handle,
                             raw_range=[0, 0, 950, 600],
-                            target_path=paths["picture"]["common"] + "\\战斗\\战斗中_继续作战.png"):
+                            target_path=paths["picture"]["common"] + "\\battle\\战斗中_继续作战.png"):
                         mouse_left_click(
                             handle=handle,
                             interval_time=click_interval,
@@ -1394,27 +1394,27 @@ class FAA:
                 target_opts=[
                     {
                         "raw_range": [202, 419, 306, 461],
-                        "target_path": paths["picture"]["common"] + "\\战斗\\战斗后_1_战利品.png",
+                        "target_path": paths["picture"]["common"] + "\\battle\\战斗后_1_战利品.png",
                         "target_tolerance": 0.999
                     },
                     {
                         "raw_range": [202, 419, 306, 461],
-                        "target_path": paths["picture"]["common"] + "\\战斗\\战斗后_2_战利品阴影版.png",
+                        "target_path": paths["picture"]["common"] + "\\battle\\战斗后_2_战利品阴影版.png",
                         "target_tolerance": 0.999
                     },
                     {
                         "raw_range": [400, 47, 550, 88],
-                        "target_path": paths["picture"]["common"] + "\\战斗\\战斗后_3_战斗结算.png",
+                        "target_path": paths["picture"]["common"] + "\\battle\\战斗后_3_战斗结算.png",
                         "target_tolerance": 0.999
                     },
                     {
                         "raw_range": [400, 35, 550, 75],
-                        "target_path": paths["picture"]["common"] + "\\战斗\\战斗后_4_翻宝箱.png",
+                        "target_path": paths["picture"]["common"] + "\\battle\\战斗后_4_翻宝箱.png",
                         "target_tolerance": 0.999
                     },
                     {
                         "raw_range": [796, 413, 950, 485],
-                        "target_path": paths["picture"]["common"] + "\\战斗\\战斗前_开始按钮.png",
+                        "target_path": paths["picture"]["common"] + "\\battle\\战斗前_开始按钮.png",
                         "target_tolerance": 0.999
                     }
                 ],
@@ -1763,7 +1763,7 @@ class FAA:
                             find = loop_find_p_in_w(
                                 raw_w_handle=handle,
                                 raw_range=[380, 175, 925, 420],
-                                target_path=paths["picture"]["card"] + "\\房间\\" + quest_card_n + ".png",
+                                target_path=paths["picture"]["card"] + "\\room\\" + quest_card_n + ".png",
                                 target_tolerance=0.95,
                                 target_failed_check=0.4,
                                 target_sleep=0.2,
@@ -1832,7 +1832,7 @@ class FAA:
             find = loop_find_p_in_w(
                 raw_w_handle=handle,
                 raw_range=[796, 413, 950, 485],
-                target_path=paths["picture"]["common"] + "\\战斗\\战斗前_开始按钮.png",
+                target_path=paths["picture"]["common"] + "\\battle\\战斗前_开始按钮.png",
                 target_interval=1,
                 target_failed_check=10,
                 target_sleep=0.3,
@@ -1860,7 +1860,7 @@ class FAA:
             find = loop_find_p_in_w(
                 raw_w_handle=handle,
                 raw_range=[796, 413, 950, 485],
-                target_path=paths["picture"]["common"] + "\\战斗\\战斗前_开始按钮.png",
+                target_path=paths["picture"]["common"] + "\\battle\\战斗前_开始按钮.png",
                 target_tolerance=0.95,
                 target_interval=1,
                 target_failed_check=10,
@@ -1875,7 +1875,7 @@ class FAA:
             find = find_p_in_w(
                 raw_w_handle=handle,
                 raw_range=[0, 0, 950, 600],
-                target_path=paths["picture"]["common"] + "\\战斗\\战斗前_系统提示.png",
+                target_path=paths["picture"]["common"] + "\\battle\\战斗前_系统提示.png",
                 target_tolerance=0.98)
             if find:
                 mouse_left_click(handle=handle, x=int(427 * zoom), y=int(353 * zoom))
@@ -1901,11 +1901,11 @@ class FAA:
                 target_opts=[
                     {
                         "raw_range": [202, 419, 306, 461],
-                        "target_path": paths["picture"]["common"] + "\\战斗\\战斗后_1_战利品.png",
+                        "target_path": paths["picture"]["common"] + "\\battle\\战斗后_1_战利品.png",
                         "target_tolerance": 0.999},
                     {
                         "raw_range": [202, 419, 306, 461],
-                        "target_path": paths["picture"]["common"] + "\\战斗\\战斗后_2_战利品阴影版.png",
+                        "target_path": paths["picture"]["common"] + "\\battle\\战斗后_2_战利品阴影版.png",
                         "target_tolerance": 0.999
                     }],
                 return_mode="or")
@@ -1967,7 +1967,7 @@ class FAA:
             find = loop_find_p_in_w(
                 raw_w_handle=handle,
                 raw_range=[400, 35, 550, 75],
-                target_path=paths["picture"]["common"] + "\\战斗\\战斗后_4_翻宝箱.png",
+                target_path=paths["picture"]["common"] + "\\battle\\战斗后_4_翻宝箱.png",
                 target_failed_check=15,
                 target_sleep=2,
                 click=False,
@@ -2020,7 +2020,7 @@ class FAA:
             find = loop_find_p_in_w(
                 raw_w_handle=handle,
                 raw_range=[0, 0, 950, 600],
-                target_path=paths["picture"]["common"] + "\\战斗\\战斗中_火苗能量.png",
+                target_path=paths["picture"]["common"] + "\\battle\\战斗中_火苗能量.png",
                 target_interval=0.5,
                 target_failed_check=30,
                 target_sleep=0.1,
@@ -2074,7 +2074,7 @@ class FAA:
             target_opts=[
                 {
                     "raw_range": [796, 413, 950, 485],
-                    "target_path": paths["picture"]["common"] + "\\战斗\\战斗前_开始按钮.png",
+                    "target_path": paths["picture"]["common"] + "\\battle\\战斗前_开始按钮.png",
                     "target_tolerance": 0.99},
                 {
                     "raw_range": [200, 0, 750, 100],
@@ -2094,6 +2094,9 @@ class FAA:
     """其他非战斗功能"""
 
     def reload_to_login_ui(self):
+        if "|" not in self.channel:
+            mouse_left_click(self.handle_zmb,1020,234)
+            return
         zoom = self.zoom
         handle = self.handle_360
 
@@ -2127,22 +2130,24 @@ class FAA:
             # 点击刷新按钮 该按钮在360窗口上
             self.reload_to_login_ui()
 
-            # 是否在 选择服务器界面 - 判断是否存在 最近玩过的服务器ui(4399 or qq空间)
-            result = loop_find_ps_in_w(
-                raw_w_handle=self.handle_browser,
-                target_opts=[
-                    {
-                        "raw_range": [0, 0, 2000, 2000],
-                        "target_path": paths["picture"]["common"] + "\\登录\\1_我最近玩过的服务器_4399.png",
-                        "target_tolerance": 0.9,
-                    }, {
-                        "raw_range": [0, 0, 2000, 2000],
-                        "target_path": paths["picture"]["common"] + "\\登录\\1_我最近玩过的服务器_qq.png",
-                        "target_tolerance": 0.9,
-                    }
-                ],
-                target_return_mode="or")
-
+            if "|" in self.channel:
+                # 是否在 选择服务器界面 - 判断是否存在 最近玩过的服务器ui(4399 or qq空间)
+                result = loop_find_ps_in_w(
+                    raw_w_handle=self.handle_browser,
+                    target_opts=[
+                        {
+                            "raw_range": [0, 0, 2000, 2000],
+                            "target_path": paths["picture"]["common"] + "\\登录\\1_我最近玩过的服务器_4399.png",
+                            "target_tolerance": 0.9,
+                        }, {
+                            "raw_range": [0, 0, 2000, 2000],
+                            "target_path": paths["picture"]["common"] + "\\登录\\1_我最近玩过的服务器_qq.png",
+                            "target_tolerance": 0.9,
+                        }
+                    ],
+                    target_return_mode="or")
+            else:
+                result = True
             if not result:
                 print_g(text="未找到进入输入服务器, 可能进入未知界面, 或QQ空间需重新登录", player=self.player, garde=1)
                 result = loop_find_p_in_w(
@@ -2163,47 +2168,51 @@ class FAA:
                 continue
 
             else:
-                """尝试根据QQ空间或4399的不同ui 进入最近进入的服务器"""
-                # 4399
-                result = find_p_in_w(
-                    raw_w_handle=self.handle_browser,
-                    raw_range=[0, 0, 2000, 2000],
-                    target_path=paths["picture"]["common"] + "\\登录\\1_我最近玩过的服务器_4399.png",
-                    target_tolerance=0.9
-                )
-                if result:
-                    # 点击进入服务器
-                    mouse_left_click(
-                        handle=self.handle_browser,
-                        x=int(result[0] * zoom),
-                        y=int((result[1] + 30) * zoom),
-                        sleep_time=0.5)
+                if "|" in self.channel:
+                    """尝试根据QQ空间或4399的不同ui 进入最近进入的服务器"""
+                    # 4399
+                    result = find_p_in_w(
+                        raw_w_handle=self.handle_browser,
+                        raw_range=[0, 0, 2000, 2000],
+                        target_path=paths["picture"]["common"] + "\\登录\\1_我最近玩过的服务器_4399.png",
+                        target_tolerance=0.9
+                    )
+                    if result:
+                        # 点击进入服务器
+                        mouse_left_click(
+                            handle=self.handle_browser,
+                            x=int(result[0] * zoom),
+                            y=int((result[1] + 30) * zoom),
+                            sleep_time=0.5)
 
-                # QQ空间
-                result = find_p_in_w(
-                    raw_w_handle=self.handle_browser,
-                    raw_range=[0, 0, 2000, 2000],
-                    target_path=paths["picture"]["common"] + "\\登录\\1_我最近玩过的服务器_qq.png",
-                    target_tolerance=0.9
-                )
-                if result:
-                    # 点击进入服务器
-                    mouse_left_click(
-                        handle=self.handle_browser,
-                        x=int(result[0] * zoom),
-                        y=int((result[1] + 30) * zoom),
-                        sleep_time=0.5)
+                    # QQ空间
+                    result = find_p_in_w(
+                        raw_w_handle=self.handle_browser,
+                        raw_range=[0, 0, 2000, 2000],
+                        target_path=paths["picture"]["common"] + "\\登录\\1_我最近玩过的服务器_qq.png",
+                        target_tolerance=0.9
+                    )
+                    if result:
+                        # 点击进入服务器
+                        mouse_left_click(
+                            handle=self.handle_browser,
+                            x=int(result[0] * zoom),
+                            y=int((result[1] + 30) * zoom),
+                            sleep_time=0.5)
 
-                """查找 - 关闭 健康游戏公告"""
-                # 查找健康游戏公告
-                result = loop_find_p_in_w(
-                    raw_w_handle=self.handle_browser,
-                    raw_range=[0, 0, 2000, 2000],
-                    target_path=paths["picture"]["common"] + "\\登录\\2_健康游戏公告.png",
-                    target_tolerance=0.97,
-                    target_failed_check=30,
-                    target_sleep=0.5,
-                    click=False)
+                if "|" in self.channel:
+                    """查找 - 关闭 健康游戏公告"""
+                    # 查找健康游戏公告
+                    result = loop_find_p_in_w(
+                        raw_w_handle=self.handle_browser,
+                        raw_range=[0, 0, 2000, 2000],
+                        target_path=paths["picture"]["common"] + "\\登录\\2_健康游戏公告.png",
+                        target_tolerance=0.97,
+                        target_failed_check=30,
+                        target_sleep=0.5,
+                        click=False)
+                else:
+                    result = True
                 if not result:
                     print_g(text="未找到健康游戏公告, 重新刷新", player=self.player, garde=2)
                     continue
@@ -2754,7 +2763,7 @@ class FAA:
             find = loop_find_p_in_w(
                 raw_w_handle=handle,
                 raw_range=[796, 413, 950, 485],
-                target_path=paths["picture"]["common"] + "\\战斗\\战斗前_开始按钮.png",
+                target_path=paths["picture"]["common"] + "\\battle\\战斗前_开始按钮.png",
                 target_tolerance=0.95,
                 target_interval=1,
                 target_failed_check=30,
@@ -2776,7 +2785,7 @@ class FAA:
             find = find_p_in_w(
                 raw_w_handle=handle,
                 raw_range=[0, 0, 950, 600],
-                target_path=paths["picture"]["common"] + "\\战斗\\战斗前_系统提示.png",
+                target_path=paths["picture"]["common"] + "\\battle\\战斗前_系统提示.png",
                 target_tolerance=0.98)
             if find:
                 mouse_left_click(
@@ -2794,7 +2803,7 @@ class FAA:
             find = loop_find_p_in_w(
                 raw_w_handle=handle,
                 raw_range=[0, 0, 950, 600],
-                target_path=paths["picture"]["common"] + "\\战斗\\战斗中_火苗能量.png",
+                target_path=paths["picture"]["common"] + "\\battle\\战斗中_火苗能量.png",
                 target_interval=1,
                 target_failed_check=30,
                 target_sleep=1,

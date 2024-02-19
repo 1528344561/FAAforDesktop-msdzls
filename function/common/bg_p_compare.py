@@ -260,7 +260,7 @@ if __name__ == '__main__':
         # handle = faa_get_handle("锑食", mode="browser")
         handle = faa_get_handle(channel="深渊之下 | 锑食", mode="browser")
 
-        target_path = paths["picture"]["common"] + "\\战斗\\战斗前_创建房间.png"
+        target_path = paths["picture"]["common"] + "\\battle\\战斗前_创建房间.png"
 
         # result = loop_find_p_in_w(raw_w_handle=handle,
         #                           raw_range=[0, 0, 950, 600],

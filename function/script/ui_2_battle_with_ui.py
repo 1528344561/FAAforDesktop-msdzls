@@ -214,7 +214,7 @@ class Todo(QThread):
         find = loop_find_p_in_w(
             raw_w_handle=faa_a.handle,
             raw_range=[796, 413, 950, 485],
-            target_path=paths["picture"]["common"] + "\\战斗\\战斗前_开始按钮.png",
+            target_path=paths["picture"]["common"] + "\\battle\\战斗前_开始按钮.png",
             click_zoom=zoom,
             target_sleep=0.3,
             click=False,
@@ -248,7 +248,7 @@ class Todo(QThread):
         find = loop_find_p_in_w(
             raw_w_handle=faa_b.handle,
             raw_range=[0, 0, 950, 600],
-            target_path=paths["picture"]["common"] + "\\战斗\\战斗前_接受邀请.png",
+            target_path=paths["picture"]["common"] + "\\battle\\战斗前_接受邀请.png",
             click_zoom=zoom,
             target_sleep=2.0,
             target_failed_check=2.0)

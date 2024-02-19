@@ -1,9 +1,10 @@
 import time
+
 from ctypes import windll, byref, c_ubyte
 from ctypes.wintypes import RECT, HWND
 
 from cv2 import imwrite, imshow, waitKey
-from numpy import uint8, frombuffer
+from numpy import uint8, frombuffer, ascontiguousarray
 
 from function.script.scattered.gat_handle import faa_get_handle
 
@@ -58,7 +59,8 @@ def png_cropping(image, raw_range: list):
 
 
 def main():
-    handle = faa_get_handle(channel="锑食", mode="flash")
+    handle = 4067450
+    # handle = faa_get_handle(channel="锑食", mode="flash")
     # handle = faa_get_handle(channel="深渊之下 | 锑食", mode="flash")
     # handle = faa_get_handle(channel="深渊之下 | 锑食", mode="360")
 
@@ -75,4 +77,7 @@ def main():
 
 
 if __name__ == "__main__":
+    # img = capture_picture_png(4067450,[0,0,600,600])
+    # with open("image.jpg", "wb") as file:
+    #     file.write(ascontiguousarray(img))
     main()

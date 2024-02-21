@@ -858,7 +858,7 @@ class Todo(QThread):
     def run(self):
 
         self.sin_out.emit(
-            "每一个大类的任务开始前均会重启游戏以防止bug...")
+            "每一个大类的任务开始前均会重启游戏以防止bug... [暂时先不刷新了]")
         start_time = datetime.datetime.now()
 
         need_reload = False

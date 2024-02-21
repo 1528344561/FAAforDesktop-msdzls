@@ -1,7 +1,7 @@
 {
     "game_name": "",
-    "name_1p": "\u5149\u8f89",
-    "name_2p": "\u9006\u6218",
+    "name_1p": "\u75af\u72c2\u98df\u795e",
+    "name_2p": "\u82b3\u8349",
     "zoom_ratio": 0,
     "level_1p": 60,
     "level_2p": 60,
@@ -9,10 +9,10 @@
     "auto_pickup_1p": false,
     "auto_pickup_2p": true,
     "sign_in": {
-        "active": true
+        "active": false
     },
     "fed_and_watered": {
-        "active": true
+        "active": false
     },
     "quest_guild": {
         "active": false,
@@ -54,20 +54,20 @@
     },
     "magic_tower_prison_1": {
         "active": false,
-        "stage": true,
+        "stage": false,
         "deck": 6,
         "battle_plan_1p": 22
     },
     "magic_tower_prison_2": {
         "active": false,
-        "stage": true,
+        "stage": false,
         "deck": 6,
         "battle_plan_1p": 23
     },
     "warrior": {
-        "active": false,
+        "active": true,
         "is_group": true,
-        "max_times": 8,
+        "max_times": 1,
         "deck": 1,
         "battle_plan_1p": 2,
         "battle_plan_2p": 3,
@@ -76,7 +76,7 @@
     "cross_server": {
         "active": false,
         "is_group": true,
-        "max_times": 10,
+        "max_times": 1,
         "stage": "CS-5-4",
         "deck": 1,
         "battle_plan_1p": 2,
@@ -84,9 +84,9 @@
         "group": false
     },
     "relic": {
-        "active": false,
+        "active": true,
         "is_group": true,
-        "max_times": 5,
+        "max_times": 1,
         "stage": "NO-3-4",
         "deck": 1,
         "battle_plan_1p": 2,
@@ -94,8 +94,8 @@
         "group": false
     },
     "normal_battle": {
-        "active": true,
-        "is_group": true,
+        "active": false,
+        "is_group": false,
         "max_times": 35,
         "stage": "EX-4-6",
         "deck": 2,
@@ -110,7 +110,7 @@
         "active": false
     },
     "cross_server_reputation": {
-        "active": true
+        "active": false
     },
     "customize": {
         "active": false,

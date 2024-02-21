@@ -225,7 +225,7 @@
               </size>
              </property>
              <property name="text">
-              <string>游戏名称</string>
+              <string></string>
              </property>
             </widget>
            </item>
@@ -285,7 +285,7 @@
               </size>
              </property>
              <property name="text">
-              <string>2P窗口名</string>
+              <string>2P游戏名</string>
              </property>
             </widget>
            </item>
@@ -339,7 +339,7 @@
               </size>
              </property>
              <property name="text">
-              <string>1P窗口名</string>
+              <string>1P游戏名</string>
              </property>
             </widget>
            </item>
@@ -570,7 +570,7 @@
               </size>
              </property>
              <property name="text">
-              <string>自动放卡战斗</string>
+              <string>自动放卡战斗[不选则秒杀]</string>
              </property>
             </widget>
            </item>
@@ -3637,7 +3637,7 @@ Link Start</string>
           </size>
          </property>
          <property name="text">
-          <string>战斗方案-1P</string>
+          <string>战斗方案-1P[桌面版可以不选战斗方案,由秒杀完成]</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>

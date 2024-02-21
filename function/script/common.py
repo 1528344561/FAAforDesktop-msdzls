@@ -30,6 +30,12 @@ class FAA:
         self.handle_browser = faa_get_handle(channel=self.channel, mode="browser")
         self.handle_360 = faa_get_handle(channel=self.channel, mode="360")
         self.handle_zmb = faa_get_handle(channel=self.channel, mode="zmb")
+        self.handle_loginButton = faa_get_handle(channel=self.channel,mode="loginButton")
+        self.handle_common_kill_Button = faa_get_handle(channel=self.channel,mode="commonKillButton")
+        self.handle_boss_kill_Button = faa_get_handle(channel=self.channel,mode="bossKillButton")
+        self.handle_oneKeyOnHookButton = faa_get_handle(channel=self.channel,mode="oneKeyOnHookButton")
+        self.is_zmb = "|" not in self.channel
+        print("is_zmb ? "+str(self.is_zmb))
         # 缩放
         self.zoom = zoom  # float 1.0 即百分百
 
@@ -690,9 +696,15 @@ class FAA:
             mouse_left_click(
                 handle=self.handle,
                 x=int(my_dict[stage_1] * self.zoom),
-                y=int(411 * self.zoom),
+                y=int(456 * self.zoom),
                 sleep_time=2)
 
+            mouse_left_click(
+            handle=self.handle,
+            x=int(my_dict[stage_1] * self.zoom),
+            y=int(456 * self.zoom),
+            sleep_time=2)
+            
             # 切区
             my_dict = {"1": 8, "2": 2, "3": 2}
             change_to_region(region_id=my_dict[stage_1])
@@ -1594,7 +1606,6 @@ class FAA:
                 # 武器技能 + 自动收集
                 use_weapon_skill()
                 auto_pickup()
-
                 """一轮不到7s+点7*9个位置需要的时间, 休息到该时间, 期间每[check_invite]秒检测一次"""
                 time_spend_a_round = time.time() - time_round_begin
                 if time_spend_a_round < round_max_time:
@@ -2033,10 +2044,14 @@ class FAA:
 
                 # 非1P晚一点点开始 这是必须的!!!! 否则人物都放不下来
                 time.sleep(0 if player == 1 else 0.33333)
-
+                print("auto_battle ",self.is_auto_battle)
+                if self.is_zmb and not self.is_auto_battle:
+                    self.pressOneKeyOnHookButton()
                 # 战斗循环
                 self.action_in_battle()
-
+                # 桌面版秒杀
+                if self.is_zmb and not self.is_auto_battle:
+                    self.pressOneKeyOnHookButton()
                 print_g(text="识别到五种战斗结束标志之一, 进行收尾工作", player=player, garde=1)
 
                 """战斗结束后, 一般流程为 (潜在的任务完成黑屏) -> 战利品 -> 战斗结算 -> 翻宝箱, 之后会回到房间, 魔塔会回到其他界面"""
@@ -2056,7 +2071,13 @@ class FAA:
             return 0  # 0-正常结束
 
         return main()
-
+    def pressOneKeyOnHookButton(self):
+        mouse_left_click(
+            handle=self.handle_oneKeyOnHookButton,
+            x=int(5 * self.zoom),
+            y=int(5 * self.zoom),
+            interval_time=0.05,
+            sleep_time=1)
     def action_round_of_battle_after(self):
 
         """
@@ -2095,7 +2116,7 @@ class FAA:
 
     def reload_to_login_ui(self):
         if "|" not in self.channel:
-            mouse_left_click(self.handle_zmb,1020,234)
+            mouse_left_click(self.handle_loginButton,2,2)
             return
         zoom = self.zoom
         handle = self.handle_360
@@ -2129,7 +2150,7 @@ class FAA:
 
             # 点击刷新按钮 该按钮在360窗口上
             self.reload_to_login_ui()
-
+            print("loading game")
             if "|" in self.channel:
                 # 是否在 选择服务器界面 - 判断是否存在 最近玩过的服务器ui(4399 or qq空间)
                 result = loop_find_ps_in_w(
@@ -2200,9 +2221,10 @@ class FAA:
                             y=int((result[1] + 30) * zoom),
                             sleep_time=0.5)
 
-                if "|" in self.channel:
-                    """查找 - 关闭 健康游戏公告"""
-                    # 查找健康游戏公告
+
+                """查找 - 关闭 健康游戏公告"""
+                # 查找健康游戏公告
+                if not self.is_zmb:
                     result = loop_find_p_in_w(
                         raw_w_handle=self.handle_browser,
                         raw_range=[0, 0, 2000, 2000],
@@ -2211,12 +2233,25 @@ class FAA:
                         target_failed_check=30,
                         target_sleep=0.5,
                         click=False)
-                else:
-                    result = True
+                # else:
+                #     result = loop_find_p_in_w(
+                #         raw_w_handle=self.handle_browser,
+                #         raw_range=[0, 0, 2000, 2000],
+                #         target_path=paths["picture"]["common"] + "\\登录\\2_健康游戏公告.png",
+                #         target_tolerance=0.97,
+                #         target_failed_check=15,
+                #         target_sleep=0.5,
+                #         click=False)
+                #     result = True
+
                 if not result:
                     print_g(text="未找到健康游戏公告, 重新刷新", player=self.player, garde=2)
                     continue
                 else:
+                    if self.is_zmb:
+                        print("start sleep")
+                        time.sleep(6)
+                        print("end sleep")
                     # 重新获取句柄, 此时游戏界面的句柄已经改变
                     self.handle = faa_get_handle(channel=self.channel, mode="flash")
 
@@ -2226,7 +2261,7 @@ class FAA:
                         raw_range=[0, 0, 950, 600],
                         target_path=paths["picture"]["common"] + "\\登录\\3_健康游戏公告_确定.png",
                         target_tolerance=0.97,
-                        target_failed_check=15,
+                        target_failed_check= 8 if self.is_zmb else 15,
                         click=True,
                         click_zoom=zoom)
 

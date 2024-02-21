@@ -1,4 +1,4 @@
-from win32gui import FindWindowEx, FindWindow, EnumWindows
+from win32gui import FindWindowEx, FindWindow, EnumWindows, GetWindowText
 import win32gui
 """
 窗口结构
@@ -42,13 +42,35 @@ def faa_get_handle(channel, mode="game"):
             handle = FindWindowEx(handle, None, "NativeWindowClass", "")  # game窗口
     else:
         handle = find_window(channel)
-        print('游戏窗口句柄:'+str(handle))
+
+        print('游戏母窗口句柄:'+str(handle))
         if mode in ["flash","browser"]:
-            handle = FindWindowEx(handle, None, "Afx:400000:b:10005:900010:0", "")
-            handle = FindWindowEx(handle, None, None, "")
-            handle = FindWindowEx(handle, None, None, "")
-            handle = FindWindowEx(handle, None, None, "Chrome Legacy Window")
+            # t_handle = FindWindowEx(handle, None, "", "")
+            # t_handle = EnumWindows(handle,None,None,)
+            if mode == "flash":
+
+                windowTitle = GetWindowText(handle)
+                tTitle = windowTitle.split('窗口句柄:')[1]
+                for idx,ch in enumerate(tTitle):
+                    if ch<'0' or ch>'9':
+                        tTitle = tTitle[0:idx]
+                # print(tTitle)
+                handle = int(tTitle)
+                # handle = FindWindowEx(handle, None, None, "")
+                # handle = FindWindowEx(handle, None, None, "Chrome Legacy Window")
+                # print('游戏句柄'+str(handle))
             # handle = FindWindowEx(handle, None, None, "") # game窗口
+        elif mode == "loginButton" :
+            handle = FindWindowEx(handle,None,None,"登录")
+        elif mode in ['commonKillButton','bossKillButton','oneKeyOnHookButton']:
+            pass
+            handle = FindWindowEx(handle,None,"SysTabControl32","")
+            if mode == 'oneKeyOnHookButton':
+                handle = FindWindowEx(handle, None, None, "挂机配置")
+                handle = FindWindowEx(handle, None, None, "一键挂机")
+            elif mode == 'commonKillButton':
+                # handle =
+                pass
     return handle
 
 
@@ -56,4 +78,4 @@ if __name__ == '__main__':
     # print(faa_get_handle(channel="锑食", mode="360"))
     # print(faa_get_handle(channel="锑食", mode="browser"))
     # print(faa_get_handle(channel="锑食", mode="flash"))  # 刷新游戏后改变
-    print(faa_get_handle(channel="光辉",mode="flash"))
+    print(faa_get_handle(channel="芳草",mode="flash"))

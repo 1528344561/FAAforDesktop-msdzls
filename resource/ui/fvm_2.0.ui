@@ -225,7 +225,7 @@
               </size>
              </property>
              <property name="text">
-              <string></string>
+              <string>游戏名称</string>
              </property>
             </widget>
            </item>
@@ -285,7 +285,7 @@
               </size>
              </property>
              <property name="text">
-              <string>2P游戏名</string>
+              <string>2P窗口名</string>
              </property>
             </widget>
            </item>
@@ -339,7 +339,7 @@
               </size>
              </property>
              <property name="text">
-              <string>1P游戏名</string>
+              <string>1P窗口名</string>
              </property>
             </widget>
            </item>
@@ -1863,7 +1863,7 @@ Link Start</string>
           </size>
          </property>
          <property name="text">
-          <string>OR-(1|2|3)-0</string>
+          <string>OF-(1|2|3)-0</string>
          </property>
         </widget>
        </item>
@@ -2666,7 +2666,7 @@ Link Start</string>
           </size>
          </property>
          <property name="text">
-          <string>自定义序列(大赛)</string>
+          <string>自定义序列</string>
          </property>
         </widget>
        </item>
@@ -4506,7 +4506,7 @@ Link Start</string>
           </size>
          </property>
          <property name="text">
-          <string>自建房对战(假期)</string>
+          <string>自建房对战</string>
          </property>
         </widget>
        </item>

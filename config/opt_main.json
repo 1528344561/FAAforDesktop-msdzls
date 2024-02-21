@@ -1,13 +1,13 @@
 {
     "game_name": "",
-    "name_1p": "\u75af\u72c2\u98df\u795e",
-    "name_2p": "\u82b3\u8349",
+    "name_1p": "\u96e8\u4f1e",
+    "name_2p": "\u7edd\u4e16",
     "zoom_ratio": 0,
     "level_1p": 60,
     "level_2p": 60,
     "auto_use_card": true,
     "auto_pickup_1p": false,
-    "auto_pickup_2p": true,
+    "auto_pickup_2p": false,
     "sign_in": {
         "active": false
     },
@@ -25,7 +25,7 @@
         "active": false
     },
     "offer_reward": {
-        "active": false,
+        "active": true,
         "max_times": 2,
         "deck": 1,
         "battle_plan_1p": 0,
@@ -66,7 +66,7 @@
         "battle_plan_1p": 22
     },
     "warrior": {
-        "active": true,
+        "active": false,
         "is_group": true,
         "max_times": 1,
         "deck": 1,
@@ -83,7 +83,7 @@
         "battle_plan_2p": 3
     },
     "relic": {
-        "active": true,
+        "active": false,
         "is_group": true,
         "max_times": 5,
         "stage": "NO-3-6",
@@ -92,7 +92,7 @@
         "battle_plan_2p": 3
     },
     "normal_battle": {
-        "active": true,
+        "active": false,
         "is_group": true,
         "max_times": 1,
         "stage": "NO-4-3",

@@ -26,6 +26,7 @@
     },
     "offer_reward": {
         "active": false,
+        "max_times": 2,
         "deck": 1,
         "battle_plan_1p": 0,
         "battle_plan_2p": 1
@@ -40,15 +41,15 @@
     },
     "magic_tower_alone_1": {
         "active": false,
-        "max_times": 5,
+        "max_times": 3,
         "stage": 149,
         "deck": 3,
         "battle_plan_1p": 17
     },
     "magic_tower_alone_2": {
         "active": false,
-        "max_times": 4,
-        "stage": 86,
+        "max_times": 1,
+        "stage": 123,
         "deck": 3,
         "battle_plan_1p": 15
     },
@@ -56,13 +57,13 @@
         "active": false,
         "stage": false,
         "deck": 6,
-        "battle_plan_1p": 22
+        "battle_plan_1p": 24
     },
     "magic_tower_prison_2": {
         "active": false,
         "stage": false,
         "deck": 6,
-        "battle_plan_1p": 23
+        "battle_plan_1p": 22
     },
     "warrior": {
         "active": true,
@@ -70,8 +71,7 @@
         "max_times": 1,
         "deck": 1,
         "battle_plan_1p": 2,
-        "battle_plan_2p": 3,
-        "group": false
+        "battle_plan_2p": 3
     },
     "cross_server": {
         "active": false,
@@ -80,28 +80,25 @@
         "stage": "CS-5-4",
         "deck": 1,
         "battle_plan_1p": 2,
-        "battle_plan_2p": 3,
-        "group": false
+        "battle_plan_2p": 3
     },
     "relic": {
         "active": true,
         "is_group": true,
-        "max_times": 1,
-        "stage": "NO-3-4",
+        "max_times": 5,
+        "stage": "NO-3-6",
         "deck": 1,
         "battle_plan_1p": 2,
-        "battle_plan_2p": 3,
-        "group": false
+        "battle_plan_2p": 3
     },
     "normal_battle": {
-        "active": false,
-        "is_group": false,
-        "max_times": 35,
-        "stage": "EX-4-6",
-        "deck": 2,
-        "battle_plan_1p": 9,
-        "battle_plan_2p": 10,
-        "group": true
+        "active": true,
+        "is_group": true,
+        "max_times": 1,
+        "stage": "NO-4-3",
+        "deck": 1,
+        "battle_plan_1p": 2,
+        "battle_plan_2p": 3
     },
     "receive_awards": {
         "active": false
@@ -112,8 +109,16 @@
     "cross_server_reputation": {
         "active": false
     },
+    "customize_battle": {
+        "active": false,
+        "is_group": 0,
+        "max_times": 5,
+        "deck": 1,
+        "battle_plan_1p": 0,
+        "battle_plan_2p": 1
+    },
     "customize": {
         "active": false,
-        "battle_plan_1p": 1
+        "battle_plan_1p": 3
     }
 }

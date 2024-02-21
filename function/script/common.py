@@ -17,7 +17,8 @@ from function.script.scattered.get_list_card_battle import get_list_card_battle
 from function.script.scattered.get_list_card_room import get_list_card_room
 from function.script.scattered.print_grade import print_g
 from function.script.scattered.read_json_to_stage_info import read_json_to_stage_info
-from function.tools.create_battle_coordinates import create_battle_coordinates
+from function.tools.analyzer_of_loot_logs import matchImage
+from function.tools.get_battle_coordinates import create_battle_coordinates
 
 
 class FAA:
@@ -144,6 +145,7 @@ class FAA:
         点击上方菜单栏, 包含:
         VIP签到|X年活动|塔罗寻宝|大地图|大富翁|欢乐假期|每日签到|美食大赛|美食活动|萌宠神殿|跨服远征
         其中跨服会跳转到二区
+        :return bool 是否进入成功
         """
 
         failed_time = 0
@@ -387,7 +389,7 @@ class FAA:
 
         # 点击对应的地图
         my_path = paths["picture"]["map"] + "\\" + str(map_id) + ".png"
-        loop_find_p_in_w(
+        find = loop_find_p_in_w(
             raw_w_handle=self.handle,
             raw_range=[0, 0, 950, 600],
             target_path=my_path,
@@ -397,6 +399,7 @@ class FAA:
             click=True,
             click_zoom=self.zoom,
         )
+        return find
 
     def action_goto_stage(self, room_creator: bool = True, mt_first_time: bool = False):
         """
@@ -575,7 +578,7 @@ class FAA:
                 loop_find_p_in_w(
                     raw_w_handle=self.handle,
                     raw_range=[0, 0, 950, 600],
-                    target_path=paths["picture"]["common"] + "\\battle\\战斗前_魔塔_创建房间.png",
+                    target_path=paths["picture"]["common"] + "\\战斗\\战斗前_魔塔_创建房间.png",
                     click_zoom=self.zoom,
                     target_sleep=1,
                     click=True)
@@ -691,22 +694,21 @@ class FAA:
             # 进入X年活动界面
             self.action_top_menu(mode="X年活动")
 
-            # 根据模式进行选择
-            my_dict = {"1": 260, "2": 475, "3": 710}
-            mouse_left_click(
-                handle=self.handle,
-                x=int(my_dict[stage_1] * self.zoom),
-                y=int(456 * self.zoom),
-                sleep_time=2)
+            # 选择关卡
+            loop_find_p_in_w(
+                raw_w_handle=self.handle,
+                raw_range=[0, 0, 950, 600],
+                target_path=paths["picture"]["stage"] + "\\" + self.stage_info["id"] + ".png",
+                click_zoom=self.zoom,
+                target_tolerance=0.95,
+                target_sleep=1,
+                click=True)
 
-            mouse_left_click(
-            handle=self.handle,
-            x=int(my_dict[stage_1] * self.zoom),
-            y=int(456 * self.zoom),
-            sleep_time=2)
-            
             # 切区
-            my_dict = {"1": 8, "2": 2, "3": 2}
+            my_dict = {
+                "1": 8,
+                "2": 2,
+                "3": 2}
             change_to_region(region_id=my_dict[stage_1])
 
             # 仅限创房间的人
@@ -766,7 +768,7 @@ class FAA:
                 click_set_password()
 
                 # 创建队伍
-                my_path = "{}\\battle\\战斗前_创建房间.png".format(paths["picture"]["common"])
+                my_path = "{}\\战斗\\战斗前_创建房间.png".format(paths["picture"]["common"])
                 loop_find_p_in_w(
                     raw_w_handle=self.handle,
                     raw_range=[0, 0, 950, 600],
@@ -813,14 +815,28 @@ class FAA:
 
             if find:
                 # 复位滑块
-                mouse_left_click(handle=handle, x=int(413 * zoom), y=int(155 * zoom), sleep_time=0.25)
+                mouse_left_click(
+                    handle=handle,
+                    x=int(413 * zoom),
+                    y=int(155 * zoom),
+                    sleep_time=0.25)
 
-                for i in range(7):
+                for i in range(8):
+
+                    # 不是第一次滑块向下移动3次
+                    if i != 0:
+                        for j in range(3):
+                            mouse_left_click(
+                                handle=handle,
+                                x=int(413 * zoom),
+                                y=int(524 * zoom),
+                                sleep_time=0.05)
+
                     # 找到就点一下, 找不到就跳过
                     while True:
                         find = loop_find_p_in_w(
                             raw_w_handle=handle,
-                            raw_range=[0, 0, 950, 600],
+                            raw_range=[335, 120, 420, 545],
                             target_path=paths["picture"]["common"] + "\\任务_完成.png",
                             target_tolerance=0.95,
                             target_failed_check=1,
@@ -829,13 +845,13 @@ class FAA:
                             click=True)
                         if find:
                             # 领取奖励
-                            mouse_left_click(handle=handle, x=int(643 * zoom), y=int(534 * zoom), sleep_time=0.2)
+                            mouse_left_click(
+                                handle=handle,
+                                x=int(643 * zoom),
+                                y=int(534 * zoom),
+                                sleep_time=0.2)
                         else:
                             break
-
-                    # 滑块向下移动3次
-                    for j in range(3):
-                        mouse_left_click(handle=handle, x=int(413 * zoom), y=int(524 * zoom), sleep_time=0.05)
 
                 self.action_exit(mode="普通红叉")
                 break
@@ -897,6 +913,7 @@ class FAA:
         self.action_exit(mode="普通红叉")
 
     def AQRR_offer_reward(self):
+
         # 进入X年活动界面
         self.action_top_menu(mode="X年活动")
 
@@ -922,9 +939,6 @@ class FAA:
         handle = self.handle
         zoom = self.zoom
         found_flag = False  # 记录是否有完成任何一次任务
-
-        # 找到活动第一页 并进入活动页面
-        self.change_activity_list(serial_num=1)
 
         # 进入美食大赛界面
         find = self.action_top_menu(mode="美食大赛")
@@ -963,19 +977,63 @@ class FAA:
                 sleep_time=0.5)
 
         else:
-            print_g(text="[收取奖励] [美食大赛] 未打开界面, 可能大赛未刷新", player=self.player, garde=2)
+            print_g(text="[领取奖励] [美食大赛] 未打开界面, 可能大赛未刷新", player=self.player, garde=2)
 
         if not found_flag:
-            print_g(text="[收取奖励] [美食大赛] 未完成任意任务", player=self.player, garde=1)
+            print_g(text="[领取奖励] [美食大赛] 未完成任意任务", player=self.player, garde=1)
+
+    def AQRR_monopoly(self):
+
+        handle = self.handle
+        zoom = self.zoom
+
+        # 进入对应地图
+        find = self.action_top_menu(mode="大富翁")
+
+        if find:
+
+            y_dict = {
+                0: 167,
+                1: 217,
+                2: 266,
+                3: 320,
+                4: 366,
+                5: 417
+            }
+
+            for i in range(3):
+
+                if i > 0:
+                    # 下一页
+                    mouse_left_click(
+                        handle=handle,
+                        x=int(878 * zoom),
+                        y=int(458 * zoom),
+                        sleep_time=0.5)
+
+                # 点击每一个有效位置
+                for j in range(6):
+                    mouse_left_click(
+                        handle=handle,
+                        x=int(768 * zoom),
+                        y=int(y_dict[j] * zoom),
+                        sleep_time=0.1)
+
+            # 退出界面
+            mouse_left_click(
+                handle=handle,
+                x=int(928 * zoom),
+                y=int(16 * zoom),
+                sleep_time=0.5)
 
     def action_quest_receive_rewards(self, mode: str):
         """
-        收取任务奖励
-        :param mode: normal/guild/spouse/offer_reward/food_competition
+        领取奖励
+        :param mode: 普通任务/公会任务/情侣任务/悬赏任务/美食大赛/大富翁
         :return:None
         """
 
-        print_g(text="[收取任务奖励] [{}] 开始收取".format(mode), player=self.player, garde=1)
+        print_g(text="[领取奖励] [{}] 开始".format(mode), player=self.player, garde=1)
 
         if mode == "普通任务":
             self.AQRR_normal()
@@ -987,8 +1045,10 @@ class FAA:
             self.AQRR_offer_reward()
         if mode == "美食大赛":
             self.AQRR_food_competition()
+        if mode == "大富翁":
+            self.AQRR_monopoly()
 
-        print_g(text="[收取任务奖励] [{}] 已全部领取".format(mode), player=self.player, garde=1)
+        print_g(text="[领取奖励] [{}] 结束".format(mode), player=self.player, garde=1)
 
     """调用输入关卡配置和战斗配置, 在战斗前必须进行该操作"""
 
@@ -1057,7 +1117,6 @@ class FAA:
         """调用类参数"""
         player = self.player
         is_group = self.is_group
-        zoom = self.zoom
         bp_cell = copy.deepcopy(self.bp_cell)
         bp_card = copy.deepcopy(self.bp_card)
 
@@ -1244,7 +1303,7 @@ class FAA:
                 list_cell_all=list_cell_all,
                 list_shovel=list_shovel)
 
-            # 调试print
+            # 调试print 打包前务必注释!
             # print("调试info: 你的战斗放卡opt如下")
             # pprint(list_cell_all)
 
@@ -1267,7 +1326,7 @@ class FAA:
         # 筛选出 被记录的卡片变种
         new_list = []
         for mat_card in mat_card_list:
-            for i in range(3):
+            for i in range(10):
                 new_card = "{}-{}".format(mat_card, i)
                 if new_card in self.card_recorded_battle:
                     new_list.append(new_card)
@@ -1284,7 +1343,7 @@ class FAA:
                 find = find_p_in_w(
                     raw_w_handle=handle,
                     raw_range=[0, 0, 950, 600],
-                    target_path=paths["picture"]["card"] + "\\battle\\" + mat_card + ".png",
+                    target_path=paths["picture"]["card"] + "\\战斗\\" + mat_card + ".png",
                     target_tolerance=0.99)
                 if find:
                     position_list.append([int(find[0] * zoom), int(find[1] * zoom)])
@@ -1390,7 +1449,7 @@ class FAA:
                     if find_p_in_w(
                             raw_w_handle=handle,
                             raw_range=[0, 0, 950, 600],
-                            target_path=paths["picture"]["common"] + "\\battle\\战斗中_继续作战.png"):
+                            target_path=paths["picture"]["common"] + "\\战斗\\战斗中_继续作战.png"):
                         mouse_left_click(
                             handle=handle,
                             interval_time=click_interval,
@@ -1406,27 +1465,27 @@ class FAA:
                 target_opts=[
                     {
                         "raw_range": [202, 419, 306, 461],
-                        "target_path": paths["picture"]["common"] + "\\battle\\战斗后_1_战利品.png",
+                        "target_path": paths["picture"]["common"] + "\\战斗\\战斗后_1_战利品.png",
                         "target_tolerance": 0.999
                     },
                     {
                         "raw_range": [202, 419, 306, 461],
-                        "target_path": paths["picture"]["common"] + "\\battle\\战斗后_2_战利品阴影版.png",
+                        "target_path": paths["picture"]["common"] + "\\战斗\\战斗后_2_战利品阴影版.png",
                         "target_tolerance": 0.999
                     },
                     {
                         "raw_range": [400, 47, 550, 88],
-                        "target_path": paths["picture"]["common"] + "\\battle\\战斗后_3_战斗结算.png",
+                        "target_path": paths["picture"]["common"] + "\\战斗\\战斗后_3_战斗结算.png",
                         "target_tolerance": 0.999
                     },
                     {
                         "raw_range": [400, 35, 550, 75],
-                        "target_path": paths["picture"]["common"] + "\\battle\\战斗后_4_翻宝箱.png",
+                        "target_path": paths["picture"]["common"] + "\\战斗\\战斗后_4_翻宝箱.png",
                         "target_tolerance": 0.999
                     },
                     {
                         "raw_range": [796, 413, 950, 485],
-                        "target_path": paths["picture"]["common"] + "\\battle\\战斗前_开始按钮.png",
+                        "target_path": paths["picture"]["common"] + "\\战斗\\战斗前_开始按钮.png",
                         "target_tolerance": 0.999
                     }
                 ],
@@ -1606,6 +1665,7 @@ class FAA:
                 # 武器技能 + 自动收集
                 use_weapon_skill()
                 auto_pickup()
+
                 """一轮不到7s+点7*9个位置需要的时间, 休息到该时间, 期间每[check_invite]秒检测一次"""
                 time_spend_a_round = time.time() - time_round_begin
                 if time_spend_a_round < round_max_time:
@@ -1774,7 +1834,7 @@ class FAA:
                             find = loop_find_p_in_w(
                                 raw_w_handle=handle,
                                 raw_range=[380, 175, 925, 420],
-                                target_path=paths["picture"]["card"] + "\\room\\" + quest_card_n + ".png",
+                                target_path=paths["picture"]["card"] + "\\房间\\" + quest_card_n + ".png",
                                 target_tolerance=0.95,
                                 target_failed_check=0.4,
                                 target_sleep=0.2,
@@ -1810,10 +1870,10 @@ class FAA:
                 for ban_card in ban_card_list:
                     # 对于名称带-的卡, 就对应的写入, 如果不带-, 就查找其所有变种
                     if "-" in ban_card:
-                        ban_card_s.append("{}.png".format(ban_card))
+                        ban_card_s.append("{}".format(ban_card))
                     else:
                         for i in range(9):  # i代表一张卡能有的最高变种 姑且认为是3*3 = 9
-                            ban_card_s.append("{}-{}.png".format(ban_card, i))
+                            ban_card_s.append("{}-{}".format(ban_card, i))
 
                 # 读取所有已记录的卡片文件名, 并去除没有记录的卡片
                 my_list = []
@@ -1826,8 +1886,8 @@ class FAA:
                     # 只ban被记录了图片的变种卡
                     loop_find_p_in_w(
                         raw_w_handle=handle,
-                        raw_range=[370, 35, 915, 105],
-                        target_path=paths["picture"]["card"] + "\\" + ban_card_n,
+                        raw_range=[380, 40, 915, 105],
+                        target_path=paths["picture"]["card"] + "\\房间\\" + ban_card_n + ".png",
                         target_tolerance=0.95,
                         target_interval=0.2,
                         target_failed_check=1,
@@ -1843,7 +1903,7 @@ class FAA:
             find = loop_find_p_in_w(
                 raw_w_handle=handle,
                 raw_range=[796, 413, 950, 485],
-                target_path=paths["picture"]["common"] + "\\battle\\战斗前_开始按钮.png",
+                target_path=paths["picture"]["common"] + "\\战斗\\战斗前_开始按钮.png",
                 target_interval=1,
                 target_failed_check=10,
                 target_sleep=0.3,
@@ -1871,7 +1931,7 @@ class FAA:
             find = loop_find_p_in_w(
                 raw_w_handle=handle,
                 raw_range=[796, 413, 950, 485],
-                target_path=paths["picture"]["common"] + "\\battle\\战斗前_开始按钮.png",
+                target_path=paths["picture"]["common"] + "\\战斗\\战斗前_开始按钮.png",
                 target_tolerance=0.95,
                 target_interval=1,
                 target_failed_check=10,
@@ -1886,7 +1946,7 @@ class FAA:
             find = find_p_in_w(
                 raw_w_handle=handle,
                 raw_range=[0, 0, 950, 600],
-                target_path=paths["picture"]["common"] + "\\battle\\战斗前_系统提示.png",
+                target_path=paths["picture"]["common"] + "\\战斗\\战斗前_系统提示.png",
                 target_tolerance=0.98)
             if find:
                 mouse_left_click(handle=handle, x=int(427 * zoom), y=int(353 * zoom))
@@ -1907,6 +1967,10 @@ class FAA:
         player = self.player
 
         def screen_loot_logs():
+            """
+            :return: 捕获的战利品dict
+            """
+            # 是否还在战利品ui界面
             find = find_ps_in_w(
                 raw_w_handle=handle,
                 target_opts=[
@@ -1918,61 +1982,112 @@ class FAA:
                         "raw_range": [202, 419, 306, 461],
                         "target_path": paths["picture"]["common"] + "\\battle\\战斗后_2_战利品阴影版.png",
                         "target_tolerance": 0.999
-                    }],
+                    }
+                ],
                 return_mode="or")
             if find:
                 print_g(text="[战利品UI] 正常结束, 尝试捕获战利品截图", player=player, garde=1)
 
-                # 记录战利品
-                img = []
-                mouse_left_click(
-                    handle=handle,
-                    x=int(708 * zoom),
-                    y=int(484 * zoom),
-                    interval_time=0.05,
-                    sleep_time=0.3)
-                img.append(
-                    capture_picture_png(
+                def screen():
+                    # 记录战利品 tip 一张图49x49 是完美规整的
+                    image = []
+                    mouse_left_click(
                         handle=handle,
-                        raw_range=[209, 453, 698, 551]))
-                time.sleep(0.5)
+                        x=int(708 * zoom),
+                        y=int(484 * zoom),
+                        interval_time=0.05,
+                        sleep_time=0.3)
+                    image.append(
+                        capture_picture_png(
+                            handle=handle,
+                            raw_range=[209, 454, 699, 552]))
+                    time.sleep(0.5)
 
-                mouse_left_click(
-                    handle=handle,
-                    x=int(708 * zoom),
-                    y=int(510 * zoom),
-                    interval_time=0.05,
-                    sleep_time=0.3)
-                img.append(
-                    capture_picture_png(
+                    mouse_left_click(
                         handle=handle,
-                        raw_range=[209, 453, 698, 551]))
-                time.sleep(0.5)
+                        x=int(708 * zoom),
+                        y=int(510 * zoom),
+                        interval_time=0.05,
+                        sleep_time=0.3)
+                    image.append(
+                        capture_picture_png(
+                            handle=handle,
+                            raw_range=[209, 456, 699, 505]))
+                    time.sleep(0.5)
 
-                mouse_left_click(
-                    handle=handle,
-                    x=int(708 * zoom),
-                    y=int(527 * zoom),
-                    interval_time=0.05,
-                    sleep_time=0.3)
-                img.append(
-                    capture_picture_png(
+                    mouse_left_click(
                         handle=handle,
-                        raw_range=[209, 502, 698, 551]))
+                        x=int(708 * zoom),
+                        y=int(529 * zoom),
+                        interval_time=0.05,
+                        sleep_time=0.3)
+                    image.append(
+                        capture_picture_png(
+                            handle=handle,
+                            raw_range=[209, 454, 699, 552]))
 
-                # 垂直拼接
-                img = vconcat(img)
-                # 保存图片
-                title = "{}\\{}_{}_{}.png".format(
-                    paths["logs"],
+                    # 垂直拼接
+                    image = vconcat(image)
+
+                    return image
+
+                # 定义保存路径和文件名格式
+                my_path = "{}\\{}_{}P_{}.png".format(
+                    paths["logs"] + "\\loot_picture",
                     self.stage_info["id"],
-                    time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime()),
-                    player
+                    player,
+                    time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime())
                 )
-                imwrite(title, img)
+
+                # 截图并保存
+                screen = screen()
+                imwrite(my_path, screen)
+
+                # 分析图片，获取战利品字典
+                drop_dict = matchImage(imagePath=my_path)
+                print_g(text="[战利品UI] 战利品已 捕获/识别/保存, 如下:".format(drop_dict), player=player, garde=1)
+                print(drop_dict)
+
+                # 分P，在目录下保存战利品字典。
+                file_path = "{}\\loot_json\\{}P掉落.json".format(paths["logs"], player)
+                map_name = self.stage_info["id"]
+
+                # 尝试读取现有的JSON文件
+                if os.path.exists(file_path):
+                    with open(file_path, "r", encoding="utf-8") as json_file:
+                        lod_data = json.load(json_file)
+
+                    if map_name in lod_data:
+                        # 更新现有数据
+                        for item_str, count in drop_dict.items():
+                            if item_str in lod_data[map_name]:
+                                lod_data[map_name]["loots"][item_str] += count  # 更新数量
+                            else:
+                                lod_data[map_name]["loots"][item_str] = count  # 新增道具
+
+                        lod_data[map_name]["times"] += 1  # 更新次数
+
+                    else:
+                        # 创建新数据
+                        lod_data[map_name] = {}
+                        lod_data[map_name]["loots"] = drop_dict
+                        lod_data[map_name]["times"] = 1  # 初始化次数
+
+                    new_data = lod_data
+                else:
+                    # 如果文件不存在，初始化
+                    new_data = {}
+
+                # 保存或更新后的战利品字典到JSON文件
+                with open(file_path, "w", encoding="utf-8") as json_file:
+                    json.dump(new_data, json_file, ensure_ascii=False, indent=4)
+
+                return drop_dict
 
             else:
                 print_g(text="[非战利品UI] 正常结束, 可能由于延迟未能捕获战利品, 继续流程", player=player, garde=1)
+
+                return None
 
         def action_flip_treasure_chest():
             find = loop_find_p_in_w(
@@ -2057,7 +2172,7 @@ class FAA:
                 """战斗结束后, 一般流程为 (潜在的任务完成黑屏) -> 战利品 -> 战斗结算 -> 翻宝箱, 之后会回到房间, 魔塔会回到其他界面"""
 
                 # 战利品部分
-                screen_loot_logs()
+                loot_dict = screen_loot_logs()
 
                 # 战斗结算部分, 等待跳过就好了
 
@@ -2066,9 +2181,9 @@ class FAA:
 
             else:
                 print_g(text="未能找到火苗标识物, 进入战斗失败, 可能是次数不足或服务器卡顿", player=player, garde=2)
-                return 2  # 2-跳过本次
+                return 2, None  # 2-跳过本次
 
-            return 0  # 0-正常结束
+            return 0, loot_dict  # 0-正常结束
 
         return main()
     def pressOneKeyOnHookButton(self):
@@ -2383,7 +2498,7 @@ class FAA:
                 y=int(98 * zoom),
                 sleep_time=1)
 
-        def release_quest_guild():
+        def sign_in_release_quest_guild():
             """会长发布任务"""
             self.action_bottom_menu(mode="跳转_公会任务")
 
@@ -2412,13 +2527,27 @@ class FAA:
             # 关闭任务列表(红X)
             self.action_exit(mode="普通红叉", raw_range=[834, 35, 876, 83])
 
+        def sign_in_camp_key():
+            """领取营地钥匙"""
+            # 进入界面
+            find = self.action_goto_map(map_id=6)
+
+            if find:
+                # 领取钥匙
+                mouse_left_click(
+                    handle=handle,
+                    x=int(400 * zoom),
+                    y=int(445 * zoom),
+                    sleep_time=0.5)
+
         def main():
             sign_in_vip()
             sign_in_everyday()
             sign_in_food_activity()
             sign_in_tarot()
             sign_in_pharaoh()
-            release_quest_guild()
+            sign_in_release_quest_guild()
+            sign_in_camp_key()
 
         main()
 
@@ -2666,7 +2795,7 @@ class FAA:
         handle = self.handle
         zoom = self.zoom
         # 获取所有图片资源
-        my_list = os.listdir(paths["picture"]["item"] + "\\")
+        my_list = os.listdir(paths["picture"]["item"] + "\\背包\\")
         print_g(text="开启使用物品功能", player=self.player, garde=1)
 
         # 打开背包
@@ -2709,7 +2838,7 @@ class FAA:
                     find = loop_find_p_in_w(
                         raw_w_handle=handle,
                         raw_range=[466, 86, 891, 435],
-                        target_path=paths["picture"]["item"] + "\\" + item,
+                        target_path=paths["picture"]["item"] + "\\背包\\" + item,
                         target_tolerance=0.95,
                         target_interval=0.2,
                         target_failed_check=1,
@@ -2722,7 +2851,7 @@ class FAA:
                         find = loop_find_p_in_w(
                             raw_w_handle=handle,
                             raw_range=[466, 86, 950, 500],
-                            target_path=paths["picture"]["item"] + "\\使用.png",
+                            target_path=paths["picture"]["item"] + "\\背包\\使用.png",
                             target_tolerance=0.95,
                             target_interval=0.2,
                             target_failed_check=1,
@@ -2735,7 +2864,7 @@ class FAA:
                             loop_find_p_in_w(
                                 raw_w_handle=handle,
                                 raw_range=[466, 86, 950, 500],
-                                target_path=paths["picture"]["item"] + "\\使用_被选中.png",
+                                target_path=paths["picture"]["item"] + "\\背包\\使用_被选中.png",
                                 target_tolerance=0.95,
                                 target_interval=0.2,
                                 target_failed_check=1,
@@ -2762,25 +2891,25 @@ class FAA:
         while True:
 
             if first_time:
-                # 进入X年活动界面
+                # 进入界面
                 self.action_top_menu(mode="跨服远征")
                 first_time = False
 
-            # 创建房间
+            # 创建房间-右下角
             mouse_left_click(
                 handle=handle,
                 x=int(853 * zoom),
                 y=int(553 * zoom),
                 sleep_time=0.5)
 
-            # 选择地图
+            # 选择地图-巫毒
             mouse_left_click(
                 handle=handle,
                 x=int(65 * zoom),
-                y=int(70 * zoom),
+                y=int(470 * zoom),
                 sleep_time=0.5)
 
-            # 选择关卡
+            # 选择关卡-第二关
             mouse_left_click(
                 handle=handle,
                 x=int(401 * zoom),

@@ -1,3 +1,6 @@
+/logs/loot_json/*.json
+/logs/loot_picture/*.png
+/resource/picture/item/未编码索引
 /build/main/Analysis-00.toc
 /build/main/base_library.zip
 /build/main/COLLECT-00.toc

@@ -2063,8 +2063,10 @@ class FAA:
                             if item_str in lod_data[map_name]:
                                 lod_data[map_name]["loots"][item_str] += count  # 更新数量
                             else:
+                                if lod_data[map_name]["loots"] is None:
+                                    lod_data[map_name]["loots"] = {}
                                 lod_data[map_name]["loots"][item_str] = count  # 新增道具
-
+                                # pass
                         lod_data[map_name]["times"] += 1  # 更新次数
 
                     else:
